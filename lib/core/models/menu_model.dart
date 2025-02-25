@@ -10,37 +10,36 @@ class MenuModel {
   final String image;
   final String? categoryName;
   final String? subcategoryName;
-  int? selectedQuantity;
 
-  MenuModel(
-      {required this.menuId,
-      required this.restaurentId,
-      required this.name,
-      required this.description,
-      required this.quantity,
-      required this.price,
-      required this.actualPrice,
-      required this.isVeg,
-      required this.image,
-      this.categoryName,
-      this.subcategoryName,
-      this.selectedQuantity});
+  MenuModel({
+    required this.menuId,
+    required this.restaurentId,
+    required this.name,
+    required this.description,
+    required this.quantity,
+    required this.price,
+    required this.actualPrice,
+    required this.isVeg,
+    required this.image,
+    this.categoryName,
+    this.subcategoryName,
+  });
 
   // Factory method to create a MenuModel from JSON
   factory MenuModel.fromJson(Map<String, dynamic> json) {
     return MenuModel(
-        menuId: json['menu_id'],
-        restaurentId: json['restaurent_id'],
-        name: json['name'],
-        description: json['description'],
-        quantity: json['quantity'],
-        price: (json['price'] as num).toDouble(),
-        actualPrice: (json['actual_price'] as num).toDouble(),
-        isVeg: json['is_veg'],
-        image: json['image'],
-        categoryName: json['category_name'],
-        subcategoryName: json['subcategory_name'],
-        selectedQuantity: json['selectedQuantity']);
+      menuId: json['menu_id'],
+      restaurentId: json['restaurent_id'],
+      name: json['name'],
+      description: json['description'],
+      quantity: json['quantity'],
+      price: (json['price'] as num).toDouble(),
+      actualPrice: (json['actual_price'] as num).toDouble(),
+      isVeg: json['is_veg'],
+      image: json['image'],
+      categoryName: json['category_name'],
+      subcategoryName: json['subcategory_name'],
+    );
   }
 
   // Method to convert a MenuModel to JSON
@@ -56,7 +55,6 @@ class MenuModel {
       'is_veg': isVeg,
       'image': image,
       'category_name': categoryName,
-      'selectedQuantity': selectedQuantity
     };
   }
 }

@@ -35,3 +35,11 @@ class OrderDetail {
     };
   }
 }
+
+List<dynamic> parseOrderDetailsList(Map<String, dynamic> data) {
+  final List<dynamic> orderDetailsList =
+      data['order_details']; // Adjust the key as per your RPC response
+  return orderDetailsList
+      .map((json) => OrderDetail.fromJson(json as dynamic))
+      .toList();
+}

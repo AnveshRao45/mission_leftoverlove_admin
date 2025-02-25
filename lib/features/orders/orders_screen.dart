@@ -129,6 +129,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/bottom_nav_controller.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/widgets/order_item_card.dart';
+import 'package:mission_leftoverlove_admin/features/orders/order_details_screen.dart';
 import 'package:mission_leftoverlove_admin/features/orders/orders_controller.dart';
 
 class OrderScreen extends ConsumerStatefulWidget {
@@ -282,6 +283,12 @@ class _OrderScreenState extends ConsumerState<OrderScreen>
           order: order,
           onButtonPressed: () {
             // Add functionality for the button here
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) =>
+                    OrderDetailsScreen(orderId: order.orderId),
+              ),
+            );
             print('Order ID: ${order.orderId} button pressed');
           },
         );

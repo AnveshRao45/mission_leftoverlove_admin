@@ -239,10 +239,6 @@ async function signUpOrSignInOwner(email, password, restaurant_id) {
   }
 }
 
-// todo(ADDITIONAL  clarifications): The menu items list should be included in the restaurant table as when the restaurant owner wants to add the menu item he should not touch the menu table, he should be only able to alter his own restaurant table. 
-
-
-
 
 Designing the Order Model for the Admin App
 For a food ordering admin app, you need a structured approach to designing the Order and OrderDetail models. These models should capture all necessary details related to orders, including status, payment, and items ordered.

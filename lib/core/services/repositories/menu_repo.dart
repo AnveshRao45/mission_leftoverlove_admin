@@ -48,4 +48,19 @@ class MenuRepo {
       throw Exception('Error: $e');
     }
   }
+
+  Future<MenuModel> getMenuItemById(int menuItemId) async {
+    try {
+      final response = await _supabaseClient
+          .from('menu')
+          .select()
+          .eq('menu_id', menuItemId)
+          .single();
+      print("response in getMenuItemById: $response");
+
+      return response["menu"];
+    } catch (e) {
+      throw Exception('Failed to fetch menu item: $e');
+    }
+  }
 }

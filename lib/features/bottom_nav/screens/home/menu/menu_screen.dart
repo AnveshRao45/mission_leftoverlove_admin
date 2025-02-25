@@ -24,7 +24,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
   @override
   Widget build(BuildContext context) {
     final menuItems = ref.watch(
-        menuControllerProvider); // Assuming `menuProvider` is the provider for MenuController
+        menuControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
