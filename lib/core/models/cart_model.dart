@@ -1,3 +1,5 @@
+import 'package:mission_leftoverlove_admin/core/models/menu_model.dart';
+
 class CartModel {
   final String? restaurantId;
   final List<CartFood>? foodItems;
@@ -31,65 +33,56 @@ class CartModel {
 }
 
 class CartFood {
-  final int restaurentId;
-  final int menuId;
-  int selectedQuantity;
-  final double price;
-  final String name;
-  final String actualPrice;
-  final bool isVeg;
+  final int restaurantId;
 
-  CartFood({
-    required this.restaurentId,
-    required this.menuId,
-    this.selectedQuantity = 1, // Default value for selectedQuantity
-    required this.price,
-    required this.isVeg,
-    required this.name,
-    required this.actualPrice,
-  });
+  int selectedQuantity;
+  final MenuModel food;
+
+  CartFood(
+      {required this.restaurantId,
+      this.selectedQuantity = 1, // Default value for selectedQuantity
+      required this.food});
 
   // Convert a CartFood object to a Map (useful for serialization)
   Map<String, dynamic> toMap() {
     return {
-      'restaurentId': restaurentId,
-      'menuId': menuId,
+      'restaurantId': restaurantId,
       'selectedQuantity': selectedQuantity,
-      'price': price,
-      'isVeg': isVeg,
-      'name': name,
-      'actualPrice': actualPrice,
+      'food': food.toJson()
     };
   }
 
   // Create a CartFood object from a Map (useful for deserialization)
   factory CartFood.fromMap(Map<String, dynamic> map) {
     return CartFood(
-      restaurentId: map['restaurentId'] as int,
-      menuId: map['menuId'] as int,
+      restaurantId: map['restaurantId'] as int,
+      food: MenuModel.fromJson(map['food']),
       selectedQuantity: map['selectedQuantity'] as int? ?? 1, // Default if null
-      price: map['price'] as double,
-      isVeg: map['isVeg'] as bool,
-      name: map['name'] as String,
-      actualPrice: map['actualPrice'] as String,
     );
+  }
+
+  // Method to convert List<CartFood> to JSON
+  static List<Map<String, dynamic>> listToJson(List<CartFood> cartFoods) {
+    return cartFoods.map((cartFood) => cartFood.toMap()).toList();
   }
 
   @override
   String toString() =>
-      'CartFood(menuId: $menuId, selectedQuantity: $selectedQuantity, price: $price)';
+      'CartFood(menuId: , selectedQuantity: $selectedQuantity, )';
 }
 
 class PaymentModel {
   final double actualPrice;
   final double price;
   final double gst;
+  final double totalActualBill;
   final double platformFee;
   final double bill;
 
   PaymentModel(
       {required this.actualPrice,
       required this.price,
+      required this.totalActualBill,
       required this.gst,
       required this.platformFee,
       required this.bill});
@@ -98,6 +91,7 @@ class PaymentModel {
   factory PaymentModel.fromMap(Map<String, dynamic> map) {
     return PaymentModel(
         actualPrice: map['actualPrice'] ?? 0.0,
+        totalActualBill: map['totalActualBill'] ?? 0.0,
         price: map['price'] ?? 0.0,
         gst: map['gst'] ?? 0.0,
         platformFee: map['platformFee'] ?? 0.0,
@@ -109,6 +103,7 @@ class PaymentModel {
     return {
       'actualPrice': actualPrice,
       'price': price,
+      'totalActualBill': totalActualBill,
       'gst': gst,
       'platformFee': platformFee,
       'bill': bill

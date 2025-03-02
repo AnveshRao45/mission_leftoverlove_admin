@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mission_leftoverlove_admin/core/models/order_table_model.dart';
+import 'package:mission_leftoverlove_admin/core/services/supabase_service.dart';
 import 'package:mission_leftoverlove_admin/core/theme/theme.dart';
+import 'package:mission_leftoverlove_admin/features/bottom_nav/bottom_nav_controller.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/donate_screen.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/feed_screen.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/home/menu/menu_screen.dart';
-import 'package:mission_leftoverlove_admin/features/orders/orders_screen.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/profile_scren.dart';
+import 'package:mission_leftoverlove_admin/features/orders/orders_controller.dart';
+import 'package:mission_leftoverlove_admin/features/orders/orders_screen.dart';
 import 'package:mission_leftoverlove_admin/route/app_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class BottomNavScreen extends ConsumerStatefulWidget {
   static const id = AppRoutes.bottomNavScreen;
@@ -28,6 +33,37 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
     const OrderScreen(),
     const ProfileScren()
   ];
+
+  handleCallback(PostgresChangePayload payload) {
+    final newRec = OrderTable.fromJson(payload.newRecord);
+    print(newRec.orderId);
+    ref.read(ordersControllerProvider.notifier).filterOrdersByStatus(status)
+  }
+
+  initiateStream() {
+    final supabase = ref.read(supabaseServiceProvider);
+    final ownerDets = ref.read(globalOwnerModel);
+    supabase
+        .channel('public:orders')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'orders',
+          callback: handleCallback,
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.inFilter,
+            column: "restaurant_id",
+            value: [1], // Subscribe only when IDs exist
+          ),
+        )
+        .subscribe();
+  }
+
+  @override
+  void initState() {
+    initiateStream();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

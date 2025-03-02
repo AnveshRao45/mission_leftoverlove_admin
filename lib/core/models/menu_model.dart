@@ -1,6 +1,6 @@
 class MenuModel {
   final int menuId;
-  final int restaurentId;
+  final int restaurantId;
   final String name;
   final String description;
   final int quantity;
@@ -13,7 +13,7 @@ class MenuModel {
 
   MenuModel({
     required this.menuId,
-    required this.restaurentId,
+    required this.restaurantId,
     required this.name,
     required this.description,
     required this.quantity,
@@ -28,17 +28,17 @@ class MenuModel {
   // Factory method to create a MenuModel from JSON
   factory MenuModel.fromJson(Map<String, dynamic> json) {
     return MenuModel(
-      menuId: json['menu_id'],
-      restaurentId: json['restaurent_id'],
-      name: json['name'],
-      description: json['description'],
-      quantity: json['quantity'],
-      price: (json['price'] as num).toDouble(),
-      actualPrice: (json['actual_price'] as num).toDouble(),
-      isVeg: json['is_veg'],
-      image: json['image'],
-      categoryName: json['category_name'],
-      subcategoryName: json['subcategory_name'],
+      menuId: (json['menu_id'] as num?)?.toInt() ?? 0, // Default to 0 if null
+      restaurantId: (json['restaurant_id'] as num?)?.toInt() ?? 0,
+      name: json['name'] as String? ?? 'Unknown',
+      description: json['description'] as String? ?? '',
+      quantity: (json['quantity'] as num?)?.toInt() ?? 0,
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      actualPrice: (json['actual_price'] as num?)?.toDouble() ?? 0.0,
+      isVeg: json['is_veg'] as bool? ?? false,
+      image: json['image'] as String? ?? '',
+      categoryName: json['category_name'] as String?,
+      subcategoryName: json['subcategory_name'] as String?,
     );
   }
 
@@ -46,7 +46,7 @@ class MenuModel {
   Map<String, dynamic> toJson() {
     return {
       'menu_id': menuId,
-      'restaurent_id': restaurentId,
+      'restaurant_id': restaurantId,
       'name': name,
       'description': description,
       'quantity': quantity,
@@ -57,8 +57,38 @@ class MenuModel {
       'category_name': categoryName,
     };
   }
+
+  // CopyWith method to create a new instance with updated fields
+  MenuModel copyWith({
+    int? menuId,
+    int? restaurantId,
+    String? name,
+    String? description,
+    int? quantity,
+    double? price,
+    double? actualPrice,
+    bool? isVeg,
+    String? image,
+    String? categoryName,
+    String? subcategoryName,
+  }) {
+    return MenuModel(
+      menuId: menuId ?? this.menuId,
+      restaurantId: restaurantId ?? this.restaurantId,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      quantity: quantity ?? this.quantity,
+      price: price ?? this.price,
+      actualPrice: actualPrice ?? this.actualPrice,
+      isVeg: isVeg ?? this.isVeg,
+      image: image ?? this.image,
+      categoryName: categoryName ?? this.categoryName,
+      subcategoryName: subcategoryName ?? this.subcategoryName,
+    );
+  }
 }
 
+// Helper function to parse a list of JSON objects into a list of MenuModel objects
 List<MenuModel> parseMenuList(List<dynamic> jsonList) {
   return jsonList
       .map((item) => MenuModel.fromJson(item as Map<String, dynamic>))

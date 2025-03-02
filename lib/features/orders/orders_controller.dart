@@ -1,16 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mission_leftoverlove_admin/core/models/order_model.dart';
+import 'package:mission_leftoverlove_admin/core/models/order_table_model.dart';
 import 'package:mission_leftoverlove_admin/core/services/repositories/orders_repo.dart';
 import 'package:mission_leftoverlove_admin/core/services/supabase_service.dart';
 
 // State class for OrdersController
 class OrdersState {
-  final List<Order> orders;
+  final List<OrderTable> orders;
   final bool isLoading;
 
   OrdersState({required this.orders, required this.isLoading});
 
-  OrdersState copyWith({List<Order>? orders, bool? isLoading}) {
+  OrdersState copyWith({List<OrderTable>? orders, bool? isLoading}) {
     return OrdersState(
       orders: orders ?? this.orders,
       isLoading: isLoading ?? this.isLoading,
@@ -39,12 +40,24 @@ class OrdersController extends StateNotifier<OrdersState> {
   }
 
   // Filter orders by status
-  List<Order> filterOrdersByStatus(String status) {
+  List<OrderTable> filterOrdersByStatus(String status) {
     return state.orders.where((order) => order.orderStat == status).toList();
   }
+
+  
 }
 
-// Provider for OrdersController
+final orderFutureProvider = FutureProvider.autoDispose.family<Order?, int>(
+  (ref, orderId) async {
+    final bookingRepo = ref.read(orderRepositoryProvider);
+    final orderDetails = await bookingRepo.getOrderDetails(orderId);
+    return orderDetails;
+  },
+);
+final streamOrdersProvider = StateProvider<List<OrderTable>>(
+  (ref) => [],
+);
+
 final ordersControllerProvider =
     StateNotifierProvider<OrdersController, OrdersState>(
   (ref) {

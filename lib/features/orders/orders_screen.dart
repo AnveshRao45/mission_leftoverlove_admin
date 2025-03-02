@@ -142,19 +142,17 @@ class OrderScreen extends ConsumerStatefulWidget {
 class _OrderScreenState extends ConsumerState<OrderScreen>
     with SingleTickerProviderStateMixin {
   late TabController _controller;
-  late ScrollController _scrollController;
+  final ScrollController _scrollController = ScrollController();
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
     super.initState();
+    _controller = TabController(length: 5, vsync: this);
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      _controller = TabController(length: 5, vsync: this);
-      _scrollController = ScrollController();
       final restaurantId =
           ref.read(globalOwnerModel.notifier).state?.restaurantId;
       ref.read(ordersControllerProvider.notifier).fetchOrders(restaurantId!);
@@ -163,7 +161,6 @@ class _OrderScreenState extends ConsumerState<OrderScreen>
 
   @override
   Widget build(BuildContext context) {
-    final ordersState = ref.watch(ordersControllerProvider);
     return Scaffold(
       body: Column(
         children: [
@@ -268,7 +265,7 @@ class _OrderScreenState extends ConsumerState<OrderScreen>
   // Helper method to build a list of orders
   Widget _buildOrderList(WidgetRef ref, String status) {
     final orders = ref
-        .read(ordersControllerProvider.notifier)
+        .watch(ordersControllerProvider.notifier)
         .filterOrdersByStatus(status);
 
     if (orders.isEmpty) {
@@ -285,8 +282,9 @@ class _OrderScreenState extends ConsumerState<OrderScreen>
             // Add functionality for the button here
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) =>
-                    OrderDetailsScreen(orderId: order.orderId),
+                builder: (context) => OrderDetailsScreen(
+                  orderId: order.orderId,
+                ),
               ),
             );
             print('Order ID: ${order.orderId} button pressed');

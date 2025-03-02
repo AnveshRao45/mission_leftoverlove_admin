@@ -1,5 +1,6 @@
 import 'package:mission_leftoverlove_admin/core/models/order_details_model.dart';
 import 'package:mission_leftoverlove_admin/core/models/order_model.dart';
+import 'package:mission_leftoverlove_admin/core/models/order_table_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class OrderRepository {
@@ -8,18 +9,18 @@ class OrderRepository {
   OrderRepository(this.supabase);
 
   // Fetch orders for a specific restaurant
-  Future<List<Order>> fetchOrdersByRestaurantId(int restaurantId) async {
+  Future<List<OrderTable>> fetchOrdersByRestaurantId(int restaurantId) async {
     try {
       final response = await supabase
           .from('orders') // Ensure the table name is correct
           .select()
-          .eq('restaurent_id',
+          .eq('restaurant_id',
               restaurantId) // Ensure the column name is correct
           .select();
 
       final List<dynamic> data = response as List<dynamic>;
       return data
-          .map((json) => Order.fromJson(json as Map<String, dynamic>))
+          .map((json) => OrderTable.fromJson(json as Map<String, dynamic>))
           .toList();
     } catch (e) {
       throw Exception('Failed to fetch orders: $e');
@@ -28,10 +29,8 @@ class OrderRepository {
 
   Future<List<OrderDetail>> fetchOrderDetailsByOrderId(int orderId) async {
     try {
-      final response = await supabase
-          .from('order_details')
-          .select()
-          .eq('order_id', orderId);
+      final response =
+          await supabase.from('order_details').select().eq('order_id', orderId);
 
       final List<dynamic> data = response as List<dynamic>;
       return data
@@ -42,25 +41,16 @@ class OrderRepository {
     }
   }
 
-  Future<List> getOrderDetails(int orderUid) async {
+  Future<Order?> getOrderDetails(int orderUid) async {
     try {
-      final response = await supabase
-          .rpc(
-            "get_order_details",
-            params: {'order_uid': orderUid},
-            get: true,
-          )
-          .select();
+      final orderRes = await supabase
+          .rpc("get_order_details", params: {"order_uid": orderUid});
+      final order = Order.fromJson(orderRes);
 
-      print("Raw RPC Response: ${response.toString()}"); // Debug the response
-
-      final Map<String, dynamic> data = response as Map<String, dynamic>;
-      print("Parsed Data: $data"); // Debug the parsed data
-
-      // Use the parseOrderDetailsList function to process the data
-      return response;
+      return order;
     } catch (e) {
-      throw Exception('Failed to fetch order details: $e');
+      print(e.toString());
+      return null;
     }
   }
 }
