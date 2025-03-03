@@ -23,13 +23,11 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final menuItems = ref.watch(
-        menuControllerProvider);
+    final menuItems = ref.watch(menuControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Menu Items"),
-        centerTitle: true,
       ),
       body: ListView.builder(
         itemCount: menuItems.length,

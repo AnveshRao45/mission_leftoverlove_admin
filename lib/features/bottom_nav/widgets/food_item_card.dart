@@ -14,57 +14,72 @@ class FoodItemCard extends StatelessWidget {
       elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Row(
+        child: Column(
           children: [
-            /// Food Image
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                foodItem.image,
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
+            Row(
+              children: [
+                /// Food Image
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    foodItem.image,
                     width: 80,
                     height: 80,
-                    color: Colors.grey.shade300,
-                    child: const Icon(Icons.image_not_supported,
-                        color: Colors.grey),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(width: 12),
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 80,
+                        height: 80,
+                        color: Colors.grey.shade300,
+                        child: const Icon(Icons.image_not_supported,
+                            color: Colors.grey),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(width: 24),
 
-            /// Food Details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    foodItem.name,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                /// Food Details
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        foodItem.name,
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "Price: \$${foodItem.price.toStringAsFixed(2)}",
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.green),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "real price: \$${foodItem.actualPrice.toStringAsFixed(2)}",
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.green),
+                      ),
+                      const SizedBox(height: 4),
+                    ],
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "Price: \$${foodItem.price.toStringAsFixed(2)}",
-                    style: const TextStyle(fontSize: 14, color: Colors.green),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "actual price: \$${foodItem.actualPrice.toStringAsFixed(2)}",
-                    style: const TextStyle(fontSize: 14, color: Colors.green),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "Quantity Left: ${foodItem.quantity}",
-                    style: const TextStyle(fontSize: 14, color: Colors.red),
-                  ),
-                ],
+                ),
+                Spacer(
+                  flex: 1,
+                ),
+                IconButton(onPressed: () {}, icon: Icon(Icons.edit))
+              ],
+            ),
+            Divider(),
+            ListTile(
+              title: Text("is active"),
+              subtitle: Text("disable this if food is not available"),
+              trailing: Switch(
+                value: foodItem.isActive,
+                onChanged: (value) {},
               ),
             ),
           ],
