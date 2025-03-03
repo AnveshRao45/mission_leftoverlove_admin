@@ -56,6 +56,11 @@ class FoodItemCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
+                    "actual price: \$${foodItem.actualPrice.toStringAsFixed(2)}",
+                    style: const TextStyle(fontSize: 14, color: Colors.green),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
                     "Quantity Left: ${foodItem.quantity}",
                     style: const TextStyle(fontSize: 14, color: Colors.red),
                   ),
