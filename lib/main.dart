@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mission_leftoverlove_admin/core/services/api_const.dart';
-import 'package:mission_leftoverlove_admin/features/auth/auth_controller.dart';
 import 'package:mission_leftoverlove_admin/features/splash/splash_screen.dart';
 import 'package:mission_leftoverlove_admin/route/navigation.dart';
 import 'package:mission_leftoverlove_admin/route/router.dart';
 import 'package:mission_leftoverlove_admin/utils/utils.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+const projectUrl = "https://aulbdywqndjypyngzvut.supabase.co";
+const anonPublic =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1bGJkeXdxbmRqeXB5bmd6dnV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ3MzA1MDAsImV4cCI6MjA1MDMwNjUwMH0.-g60skkjveKgVMCgXQrRGTooF3v_-NsQtZJkxct--XA";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

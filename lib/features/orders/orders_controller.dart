@@ -28,23 +28,39 @@ class OrdersController extends StateNotifier<OrdersState> {
 
   // Fetch orders for a specific restaurant
   Future<void> fetchOrders(int restaurantId) async {
+    print("fetching restaurant id : $restaurantId");
     state = state.copyWith(isLoading: true);
     try {
       final orders =
           await _orderRepository.fetchOrdersByRestaurantId(restaurantId);
-      state = state.copyWith(orders: orders, isLoading: false);
+      // Ensure state is updated with a new instance
+      state = state.copyWith(orders: [...orders], isLoading: false);
     } catch (e) {
       state = state.copyWith(isLoading: false);
       rethrow;
     }
   }
 
-  // Filter orders by status
+// Filter orders by status
   List<OrderTable> filterOrdersByStatus(String status) {
     return state.orders.where((order) => order.orderStat == status).toList();
   }
 
-  
+// Update or add a particular order in the list
+  void addOrUpdateOrderRealtime(OrderTable order) {
+    final existingIndex =
+        state.orders.indexWhere((o) => o.orderId == order.orderId);
+
+    List<OrderTable> updatedOrders = List.from(state.orders);
+
+    if (existingIndex != -1) {
+      updatedOrders[existingIndex] = order; // Update existing order
+    } else {
+      updatedOrders.add(order); // Add new order
+    }
+
+    state = state.copyWith(orders: updatedOrders); // Trigger state update
+  }
 }
 
 final orderFutureProvider = FutureProvider.autoDispose.family<Order?, int>(
