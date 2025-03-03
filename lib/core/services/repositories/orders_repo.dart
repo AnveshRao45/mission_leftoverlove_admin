@@ -18,6 +18,8 @@ class OrderRepository {
               restaurantId) // Ensure the column name is correct
           .select();
 
+      print("fetched raw order :$response");
+
       final List<dynamic> data = response as List<dynamic>;
       return data
           .map((json) => OrderTable.fromJson(json as Map<String, dynamic>))
@@ -46,11 +48,22 @@ class OrderRepository {
       final orderRes = await supabase
           .rpc("get_order_details", params: {"order_uid": orderUid});
       final order = Order.fromJson(orderRes);
+      print(order);
 
       return order;
     } catch (e) {
       print(e.toString());
       return null;
     }
+  }
+
+  Future<void> updateOrderStatus(String stat, int orderId) async {
+    print("Updating order: $orderId with status: $stat");
+
+    final response = await supabase
+        .from("orders")
+        .update({'order_stat': stat}).eq('order_id', orderId);
+
+    print("Response: $response");
   }
 }

@@ -36,8 +36,10 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
 
   handleCallback(PostgresChangePayload payload) {
     final newRec = OrderTable.fromJson(payload.newRecord);
-    print(newRec.orderId);
-    ref.read(ordersControllerProvider.notifier).filterOrdersByStatus(status)
+
+    ref
+        .read(ordersControllerProvider.notifier)
+        .addOrUpdateOrderRealtime(newRec);
   }
 
   initiateStream() {
@@ -53,7 +55,7 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
           filter: PostgresChangeFilter(
             type: PostgresChangeFilterType.inFilter,
             column: "restaurant_id",
-            value: [1], // Subscribe only when IDs exist
+            value: [ownerDets!.restaurantId], // Subscribe only when IDs exist
           ),
         )
         .subscribe();

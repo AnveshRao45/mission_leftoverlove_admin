@@ -54,9 +54,9 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
 
     try {
       // Update using Riverpod controller
-      // await ref
-      //     .read(ordersControllerProvider.notifier)
-      //     .updateOrderStatus(widget.orderId, newStatus);
+      await ref
+          .read(orderRepositoryProvider)
+          .updateOrderStatus(newStatus, widget.orderId);
 
       setState(() {
         currentStatus = newStatus;
@@ -131,7 +131,8 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
       ),
       body: orderAsync.when(
         data: (order) {
-          final orderDate = order!.orderDetails?.orderDate != null
+          currentStatus = order!.orderStatus!;
+          final orderDate = order.orderDetails?.orderDate != null
               ? DateFormat('MMM dd, yyyy - HH:mm')
                   .format(DateTime.parse(order.orderDetails!.orderDate!))
               : 'N/A';
