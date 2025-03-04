@@ -78,7 +78,7 @@ class FoodItemCard extends StatelessWidget {
               title: Text("is active"),
               subtitle: Text("disable this if food is not available"),
               trailing: Switch(
-                value: foodItem.isActive,
+                value: foodItem.isActive!,
                 onChanged: (value) {},
               ),
             ),

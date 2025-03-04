@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/home/menu/add_menu_form.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/home/menu/menu_controller.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/widgets/food_item_card.dart';
 
@@ -11,14 +12,22 @@ class MenuScreen extends ConsumerStatefulWidget {
 
 class _MenuScreenState extends ConsumerState<MenuScreen> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     ref.watch(menuControllerProvider);
+  }
+
+  void _showAddFoodForm(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return const ImprovedAddMenuForm();
+      },
+    );
   }
 
   @override
@@ -29,12 +38,21 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
       appBar: AppBar(
         title: const Text("Menu Items"),
       ),
-      body: ListView.builder(
-        itemCount: menuItems.length,
-        itemBuilder: (context, index) {
-          final foodItem = menuItems[index];
-          return FoodItemCard(foodItem: foodItem);
-        },
+      body: menuItems.isEmpty
+          ? const Center(child: Text("No menu items available"))
+          : ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: menuItems.length,
+              itemBuilder: (context, index) {
+                final foodItem = menuItems[index];
+                return FoodItemCard(foodItem: foodItem);
+              },
+            ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _showAddFoodForm(context),
+        label: const Text("Add Food"),
+        icon: const Icon(Icons.add),
+        backgroundColor: Colors.deepOrange,
       ),
     );
   }

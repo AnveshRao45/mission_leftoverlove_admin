@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mission_leftoverlove_admin/core/models/menu_model.dart';
+import 'package:mission_leftoverlove_admin/core/models/real_menu_model.dart';
 import 'package:mission_leftoverlove_admin/core/services/supabase_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -62,5 +63,57 @@ class MenuRepo {
     } catch (e) {
       throw Exception('Failed to fetch menu item: $e');
     }
+  }
+
+  Future<bool> addMenuItemToDB(RealMenuModel menuItem) async {
+    try {
+      final data = menuItem.toJson();
+      print("Data being inserted: $data"); // 👀 Debugging
+
+      final response = await _supabaseClient.from('menu').insert(data);
+
+      if (response.error != null) {
+        print('Error adding food item: ${response.error!.message}');
+        return false;
+      }
+      return true;
+    } catch (e) {
+      print('Exception adding food item: $e');
+      return false;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchCategories() async {
+    final response =
+        await _supabaseClient.from('category').select('id, category_name');
+
+    if (response.isEmpty) {
+      return [];
+    }
+
+    return response
+        .map((cat) => {
+              'id': cat['id'],
+              'name': cat['category_name'],
+            })
+        .toList();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchSubcategories(int categoryId) async {
+    final response = await _supabaseClient
+        .from('subcategory')
+        .select('id, subcategory_name')
+        .eq('category_id', categoryId);
+
+    if (response.isEmpty) {
+      return [];
+    }
+
+    return response
+        .map((sub) => {
+              'id': sub['id'],
+              'name': sub['subcategory_name'],
+            })
+        .toList();
   }
 }

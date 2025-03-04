@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mission_leftoverlove_admin/core/models/menu_model.dart';
+import 'package:mission_leftoverlove_admin/core/models/real_menu_model.dart';
 import 'package:mission_leftoverlove_admin/core/services/repositories/menu_repo.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/bottom_nav_controller.dart';
 
@@ -27,5 +28,17 @@ class MenuController extends StateNotifier<List<MenuModel>> {
     } catch (e) {
       print("Error fetching menu: $e");
     }
+  }
+
+  Future<bool> addMenuItem(RealMenuModel menuItem) async {
+    return await menuRepository.addMenuItemToDB(menuItem);
+  }
+
+  Future<List<Map<String, dynamic>>> fetchCategories() async {
+    return await menuRepository.fetchCategories();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchSubcategories(int categoryId) async {
+    return await menuRepository.fetchSubcategories(categoryId);
   }
 }
