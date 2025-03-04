@@ -1,5 +1,5 @@
 class MenuModel {
-  final int menuId;
+  final int? menuId;
   final int restaurantId;
   final String name;
   final String description;
@@ -13,7 +13,7 @@ class MenuModel {
   final bool? isActive;
 
   MenuModel({
-    required this.menuId,
+    this.menuId,
     required this.restaurantId,
     required this.name,
     required this.description,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/home/menu/add_menu_form.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/home/menu/menu_controller.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/widgets/food_item_card.dart';
 
@@ -24,7 +25,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        return const AddMenuForm();
+        return const ImprovedAddMenuForm();
       },
     );
   }
@@ -36,7 +37,6 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Menu Items"),
-        centerTitle: true,
       ),
       body: menuItems.isEmpty
           ? const Center(child: Text("No menu items available"))

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mission_leftoverlove_admin/core/models/menu_model.dart';
+import 'package:mission_leftoverlove_admin/core/models/real_menu_model.dart';
 import 'package:mission_leftoverlove_admin/core/services/supabase_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -64,10 +65,12 @@ class MenuRepo {
     }
   }
 
-  Future<bool> addMenuItemToDB(MenuModel menuItem) async {
+  Future<bool> addMenuItemToDB(RealMenuModel menuItem) async {
     try {
-      final response =
-          await _supabaseClient.from('MENU').insert(menuItem.toJson());
+      final data = menuItem.toJson();
+      print("Data being inserted: $data"); // 👀 Debugging
+
+      final response = await _supabaseClient.from('menu').insert(data);
 
       if (response.error != null) {
         print('Error adding food item: ${response.error!.message}');
@@ -95,7 +98,6 @@ class MenuRepo {
             })
         .toList();
   }
-
 
   Future<List<Map<String, dynamic>>> fetchSubcategories(int categoryId) async {
     final response = await _supabaseClient
