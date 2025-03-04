@@ -28,4 +28,17 @@ class MenuController extends StateNotifier<List<MenuModel>> {
       print("Error fetching menu: $e");
     }
   }
+
+  Future<bool> addMenuItem(MenuModel menuItem) async {
+    return await menuRepository.addMenuItemToDB(menuItem);
+  }
+
+  Future<List<Map<String, dynamic>>> fetchCategories() async {
+    return await menuRepository.fetchCategories();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchSubcategories(int categoryId) async {
+    return await menuRepository.fetchSubcategories(categoryId);
+  }
+
 }

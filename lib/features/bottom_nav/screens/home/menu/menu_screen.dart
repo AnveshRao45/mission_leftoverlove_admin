@@ -11,32 +11,48 @@ class MenuScreen extends ConsumerStatefulWidget {
 
 class _MenuScreenState extends ConsumerState<MenuScreen> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     ref.watch(menuControllerProvider);
   }
 
+  void _showAddFoodForm(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return const AddMenuForm();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final menuItems = ref.watch(
-        menuControllerProvider);
+    final menuItems = ref.watch(menuControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Menu Items"),
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemCount: menuItems.length,
-        itemBuilder: (context, index) {
-          final foodItem = menuItems[index];
-          return FoodItemCard(foodItem: foodItem);
-        },
+      body: menuItems.isEmpty
+          ? const Center(child: Text("No menu items available"))
+          : ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: menuItems.length,
+              itemBuilder: (context, index) {
+                final foodItem = menuItems[index];
+                return FoodItemCard(foodItem: foodItem);
+              },
+            ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _showAddFoodForm(context),
+        label: const Text("Add Food"),
+        icon: const Icon(Icons.add),
+        backgroundColor: Colors.deepOrange,
       ),
     );
   }

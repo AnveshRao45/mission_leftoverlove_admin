@@ -63,4 +63,55 @@ class MenuRepo {
       throw Exception('Failed to fetch menu item: $e');
     }
   }
+
+  Future<bool> addMenuItemToDB(MenuModel menuItem) async {
+    try {
+      final response =
+          await _supabaseClient.from('MENU').insert(menuItem.toJson());
+
+      if (response.error != null) {
+        print('Error adding food item: ${response.error!.message}');
+        return false;
+      }
+      return true;
+    } catch (e) {
+      print('Exception adding food item: $e');
+      return false;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchCategories() async {
+    final response =
+        await _supabaseClient.from('category').select('id, category_name');
+
+    if (response.isEmpty) {
+      return [];
+    }
+
+    return response
+        .map((cat) => {
+              'id': cat['id'],
+              'name': cat['category_name'],
+            })
+        .toList();
+  }
+
+
+  Future<List<Map<String, dynamic>>> fetchSubcategories(int categoryId) async {
+    final response = await _supabaseClient
+        .from('subcategory')
+        .select('id, subcategory_name')
+        .eq('category_id', categoryId);
+
+    if (response.isEmpty) {
+      return [];
+    }
+
+    return response
+        .map((sub) => {
+              'id': sub['id'],
+              'name': sub['subcategory_name'],
+            })
+        .toList();
+  }
 }

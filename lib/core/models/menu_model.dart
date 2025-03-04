@@ -10,6 +10,7 @@ class MenuModel {
   final String image;
   final String? categoryName;
   final String? subcategoryName;
+  final bool? isActive;
 
   MenuModel({
     required this.menuId,
@@ -23,6 +24,7 @@ class MenuModel {
     required this.image,
     this.categoryName,
     this.subcategoryName,
+    this.isActive,
   });
 
   // Factory method to create a MenuModel from JSON
@@ -39,6 +41,7 @@ class MenuModel {
       image: json['image'] as String? ?? '',
       categoryName: json['category_name'] as String?,
       subcategoryName: json['subcategory_name'] as String?,
+      isActive: json['is_active'] as bool? ?? true,
     );
   }
 
@@ -55,6 +58,7 @@ class MenuModel {
       'is_veg': isVeg,
       'image': image,
       'category_name': categoryName,
+      'is_active': isActive,
     };
   }
 
@@ -71,6 +75,7 @@ class MenuModel {
     String? image,
     String? categoryName,
     String? subcategoryName,
+    bool? isActive,
   }) {
     return MenuModel(
       menuId: menuId ?? this.menuId,
@@ -84,6 +89,7 @@ class MenuModel {
       image: image ?? this.image,
       categoryName: categoryName ?? this.categoryName,
       subcategoryName: subcategoryName ?? this.subcategoryName,
+      isActive: isActive ?? this.isActive,
     );
   }
 }
