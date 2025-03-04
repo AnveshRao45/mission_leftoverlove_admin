@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mission_leftoverlove_admin/core/models/menu_model.dart';
+import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/home/menu/update_menu_form.dart';
 
 class FoodItemCard extends StatelessWidget {
   final MenuModel foodItem;
@@ -70,7 +71,19 @@ class FoodItemCard extends StatelessWidget {
                 Spacer(
                   flex: 1,
                 ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.edit))
+                IconButton(
+                  onPressed: () {
+                    // Navigate to the update screen, passing the current food item.
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            UpdateFoodItemScreen(menuId: foodItem.menuId!),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.edit),
+                ),
               ],
             ),
             Divider(),

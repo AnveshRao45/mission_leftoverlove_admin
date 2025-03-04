@@ -41,4 +41,16 @@ class MenuController extends StateNotifier<List<MenuModel>> {
   Future<List<Map<String, dynamic>>> fetchSubcategories(int categoryId) async {
     return await menuRepository.fetchSubcategories(categoryId);
   }
+
+  /// Update a food item. You may also update your local state if needed.
+  Future<bool> updateFoodItem(RealMenuModel menuItem) async {
+    final success = await menuRepository.updateMenuItem(menuItem);
+    // Optionally update the local state here if you cache your list of menu items.
+    return success;
+  }
+
+  Future<RealMenuModel?> getRealMenuItemById(int menuId) async {
+    final success = await menuRepository.getMenuById(menuId);
+    return success;
+  }
 }

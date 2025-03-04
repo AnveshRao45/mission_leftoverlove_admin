@@ -50,21 +50,6 @@ class MenuRepo {
     }
   }
 
-  Future<MenuModel> getMenuItemById(int menuItemId) async {
-    try {
-      final response = await _supabaseClient
-          .from('menu')
-          .select()
-          .eq('menu_id', menuItemId)
-          .single();
-      print("response in getMenuItemById: $response");
-
-      return response["menu"];
-    } catch (e) {
-      throw Exception('Failed to fetch menu item: $e');
-    }
-  }
-
   Future<bool> addMenuItemToDB(RealMenuModel menuItem) async {
     try {
       final data = menuItem.toJson();
@@ -115,5 +100,42 @@ class MenuRepo {
               'name': sub['subcategory_name'],
             })
         .toList();
+  }
+
+  /// Updates a menu item in the database
+  Future<bool> updateMenuItem(RealMenuModel menuItem) async {
+    final response = await _supabaseClient.from('menu').update({
+      'restaurant_id': menuItem.restaurantId,
+      'item_name': menuItem.itemName,
+      'description': menuItem.description,
+      'price': menuItem.price,
+      'is_veg': menuItem.isVeg,
+      'actual_price': menuItem.actualPrice,
+      'image': menuItem.image,
+      'quantity': menuItem.quantity,
+      'cuisuine': menuItem.cuisine,
+      'category_id': menuItem.categoryId,
+      'subcategory_id': menuItem.subcategoryId,
+      'is_active': menuItem.isActive,
+    }).eq('menu_id', menuItem.menuId!);
+
+    if (response.error != null) {
+      print("Error updating menu item: ${response.error!.message}");
+      return false;
+    }
+    return true;
+  }
+
+  Future<RealMenuModel?> getMenuById(int menuId) async {
+    final response = await _supabaseClient
+        .from('menu')
+        .select()
+        .eq('menu_id', menuId)
+        .maybeSingle();
+
+    final data = response;
+
+    print(data);
+    return RealMenuModel.fromJson(data as Map<String, dynamic>);
   }
 }
