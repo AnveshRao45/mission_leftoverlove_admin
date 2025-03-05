@@ -30,6 +30,14 @@ class MenuController extends StateNotifier<List<MenuModel>> {
     }
   }
 
+  List<MenuModel> searchMenuItems(String query) {
+    if (query.isEmpty) return state;
+
+    return state
+        .where((item) => item.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+
   Future<bool> addMenuItem(RealMenuModel menuItem) async {
     return await menuRepository.addMenuItemToDB(menuItem);
   }
