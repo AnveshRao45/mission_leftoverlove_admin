@@ -8,7 +8,7 @@ class RealMenuModel {
   final double? actualPrice;
   final String? image;
   final int? quantity;
-  final String? cuisine;
+  final int? cuisine;
   final int? categoryId;
   final int? subcategoryId;
   final bool? isActive;

@@ -45,7 +45,6 @@ class MenuController extends StateNotifier<List<MenuModel>> {
   /// Update a food item. You may also update your local state if needed.
   Future<bool> updateFoodItem(RealMenuModel menuItem) async {
     final success = await menuRepository.updateMenuItem(menuItem);
-    // Optionally update the local state here if you cache your list of menu items.
     return success;
   }
 

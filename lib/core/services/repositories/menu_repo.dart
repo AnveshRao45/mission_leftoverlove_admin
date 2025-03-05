@@ -102,28 +102,44 @@ class MenuRepo {
         .toList();
   }
 
-  /// Updates a menu item in the database
-  Future<bool> updateMenuItem(RealMenuModel menuItem) async {
-    final response = await _supabaseClient.from('menu').update({
-      'restaurant_id': menuItem.restaurantId,
-      'item_name': menuItem.itemName,
-      'description': menuItem.description,
-      'price': menuItem.price,
-      'is_veg': menuItem.isVeg,
-      'actual_price': menuItem.actualPrice,
-      'image': menuItem.image,
-      'quantity': menuItem.quantity,
-      'cuisuine': menuItem.cuisine,
-      'category_id': menuItem.categoryId,
-      'subcategory_id': menuItem.subcategoryId,
-      'is_active': menuItem.isActive,
-    }).eq('menu_id', menuItem.menuId!);
-
-    if (response.error != null) {
-      print("Error updating menu item: ${response.error!.message}");
+  Future<bool> updateMenuItem(RealMenuModel model) async {
+    // Ensure the primary key (menuId) is not null
+    if (model.menuId == null) {
+      print("menuId is null, cannot update");
       return false;
     }
-    return true;
+
+    try {
+      final response = await _supabaseClient
+          .from('menu')
+          .update({
+            'restaurant_id': model.restaurantId,
+            'item_name': model.itemName,
+            'description': model.description,
+            'price': model.price,
+            'is_veg': model.isVeg,
+            'actual_price': model.actualPrice,
+            'image': model.image,
+            'quantity': model.quantity,
+            'cuisuine': model.cuisine,
+            'category_id': model.categoryId,
+            'subcategory_id': model.subcategoryId,
+            'is_active': model.isActive,
+          })
+          .eq('menu_id', model.menuId!)
+          .select()
+          .maybeSingle();
+
+      if (response == null) {
+        print("Null response received from update query");
+        return false;
+      }
+      print("Update successful, response data: $response");
+      return true;
+    } catch (e) {
+      print("Exception while updating menu: $e");
+      return false;
+    }
   }
 
   Future<RealMenuModel?> getMenuById(int menuId) async {
