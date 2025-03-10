@@ -12,10 +12,9 @@ class OrderRepository {
   Future<List<OrderTable>> fetchOrdersByRestaurantId(int restaurantId) async {
     try {
       final response = await supabase
-          .from('orders') // Ensure the table name is correct
+          .from('orders')
           .select()
-          .eq('restaurant_id',
-              restaurantId) // Ensure the column name is correct
+          .eq('restaurant_id', restaurantId)
           .select();
 
       print("fetched raw order :$response");

@@ -22,7 +22,9 @@ class OrderTable {
       userId: json['user_id'] as String,
       restaurantId: json['restaurant_id'] as int,
       orderStat: json['order_stat'] as String,
-      orderValue: json['order_value'] as double,
+      orderValue: json['order_value'] is int
+          ? (json['order_value'] as int).toDouble()
+          : json['order_value'] as double,
       orderDate: DateTime.parse(json['order_date'] as String),
     );
   }

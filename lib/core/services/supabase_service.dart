@@ -36,7 +36,7 @@ const nearbyRestaurents = "nearby_restaurants";
 // USER TABLE: uid, phonenum, email, token, photoUrl, name, moneySaved, coSaved
 
 // OWNERS TABLE: owner_id, restaurant_id, name, email, phone_number, profile_photo_url, is_active,
-// PAYMENTS_TABLE: pay_id, order_id, payment_method, amount,
+// PAYMENTS_TABLE: order_id, payment_method, payment_date, payment_status, amount_paid, transaction_id
 
 
 
