@@ -40,3 +40,15 @@ class Payment {
     };
   }
 }
+
+class PaymentSummary {
+  final int totalPayments;
+  final double totalAmount;
+  final List<Payment> payments;
+
+  PaymentSummary({
+    required this.totalPayments,
+    required this.totalAmount,
+    required this.payments,
+  });
+}

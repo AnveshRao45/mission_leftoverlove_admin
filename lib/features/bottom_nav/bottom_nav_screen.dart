@@ -5,7 +5,6 @@ import 'package:mission_leftoverlove_admin/core/services/supabase_service.dart';
 import 'package:mission_leftoverlove_admin/core/theme/theme.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/bottom_nav_controller.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/donate_screen.dart';
-import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/feed_screen.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/home/menu/menu_screen.dart';
 import 'package:mission_leftoverlove_admin/features/bottom_nav/screens/profile_scren.dart';
 import 'package:mission_leftoverlove_admin/features/orders/orders_controller.dart';
@@ -29,7 +28,9 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
 
   final screens = [
     const MenuScreen(),
-    const PaymentScreen(),
+    const PaymentScreen(
+      restaurantId: 1,
+    ),
     const DonateScreen(),
     const OrderScreen(),
     const ProfileScren()
